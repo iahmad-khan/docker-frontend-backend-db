@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: container-registry.registry.svc.local:3200/api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 3001
+  nodePort: 30001
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

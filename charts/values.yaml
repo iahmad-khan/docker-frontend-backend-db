@@ -1,0 +1,17 @@
+mongodb:
+  auth:
+    enabled: true
+    rootPassword: password
+    username: username
+    password: password
+    database: todos
+
+web:
+  image:
+    repository: container-registry.registry.svc.local:32000/web
+    tag: TAG
+
+api:
+  image:
+    repository: container-registry.registry.svc.local:32000/api
+    tag: TAG
