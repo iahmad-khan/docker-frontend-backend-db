@@ -43,9 +43,9 @@ pipeline {
                     steps {
                         script {
                             sh ''' 
-                            pushd frontend
-                            docker build -t ${DOCKER_REGISTRY}/frontend:latest .
-                            popd
+                            rm -rf frontend/package-lock.json
+                            docker build -t ${DOCKER_REGISTRY}/frontend:latest frontend
+                            
                             '''
                         }
                     }
