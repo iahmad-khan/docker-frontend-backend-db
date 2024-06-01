@@ -24,7 +24,7 @@ pipeline {
                             echo 'Running npm audit on frontend'
                             sh '''#!/bin/bash
                             pushd frontend
-                            npm audit || True
+                            npm audit || true
                             popd
                             '''
                             
@@ -40,7 +40,7 @@ pipeline {
                             echo "Running npm audit on backend" 
                             sh '''#!/bin/bash
                             pushd backend
-                            npm audit || True
+                            npm audit || true
                             popd
                             '''
                         }
@@ -81,7 +81,7 @@ pipeline {
                     steps {
                         script {
                             sh ''' 
-                             trivy image ${DOCKER_REGISTRY}/frontend:latest || True
+                             trivy image ${DOCKER_REGISTRY}/frontend:latest || true
                             
                             '''
                         }
@@ -91,7 +91,7 @@ pipeline {
                     steps {
                         script {
                             sh '''
-                            trivy image ${DOCKER_REGISTRY}/backend:latest || True
+                            trivy image ${DOCKER_REGISTRY}/backend:latest || true
                             
                             '''
                         }
