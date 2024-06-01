@@ -21,8 +21,7 @@ pipeline {
                 stage('NPM aduit - Frontend') {
                     steps {
                         script {
-                            
-                                //sh "pushd frontend && npm audit && popd"
+                             echo 'Running audit frontend'
                             
                         }
                     }
@@ -31,8 +30,7 @@ pipeline {
                     steps {
                         script {
                             
-                                //sh "${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=backend -Dsonar.sources=backend"
-                            
+                                echo "running npm audit backend"                            
                         }
                     }
                 }
@@ -81,17 +79,17 @@ pipeline {
             parallel {
                 stage('Deploy Frontend') {
                     steps {
-                        echo 'Running Helm Deploy for Frontend'
+                       
                         script {
-
+                            echo 'Running Helm Deploy for Frontend'
                             //sh 'helm upgrade --install frontend ./charts/frontend --set image.repository=${DOCKER_REGISTRY}/frontend --set image.tag=latest'
                         }
                     }
                 }
                 stage('Deploy Backend') {
                     steps {
-                        echo 'running Helm deploy for Backend'
                         script {
+                            echo 'running Helm deploy for Backend'
                             //sh 'helm upgrade --install backend ./charts/backend --set image.repository=${DOCKER_REGISTRY}/backend --set image.tag=latest'
                         }
                     }
@@ -101,8 +99,9 @@ pipeline {
 
         stage('Run DAST with OWASP ZAP') {
             steps {
-                echo 'Running DAST with OWASP ZAP'
                 script {
+                   echo 'Running DAST with OWASP ZAP'
+
                    // def targetUrl = "http://your-api-endpoint" // Replace with your actual target URL
 
                    // zapStart zapHome: '/path/to/ZAP' // Adjust the path to your ZAP installation if necessary
@@ -118,8 +117,8 @@ pipeline {
 
         stage('API Load Testing') {
             steps {
-                echo 'Running Load Test'
                 script {
+                    echo 'Running Load Test'
                     //echo "Load Test using Hey"
                     // Assuming you have a load testing tool installed (e.g., hey)
                     //sh 'hey -z 30s -c 100 http://your-api-endpoint'
