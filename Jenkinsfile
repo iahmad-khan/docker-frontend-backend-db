@@ -63,7 +63,30 @@ pipeline {
                 }
             }
         }
-
+        stage('Docker Image Scanning for CVEs') {
+            parallel {
+                stage('Scan Frontend Image using Trivy') {
+                    steps {
+                        script {
+                            sh ''' 
+                             trivy image ${DOCKER_REGISTRY}/frontend:latest || True
+                            
+                            '''
+                        }
+                    }
+                }
+                stage('Scan Frontend Image using Trivy') {
+                    steps {
+                        script {
+                            sh '''
+                            trivy image ${DOCKER_REGISTRY}/backend:latest || True
+                            
+                            '''
+                        }
+                    }
+                }
+            }
+        }   
         stage('Push Docker Images') {
             parallel {
                 stage('Push Frontend') {
