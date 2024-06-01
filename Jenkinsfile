@@ -16,13 +16,13 @@ pipeline {
             }
         }
 
-        stage('SAST') {
+        stage('SAST-NPM Audit') {
             parallel {
                 stage('NPM aduit - Frontend') {
                     steps {
                         script {
-                            echo 'Running audit frontend'
-                            sh '''#/bin/bash
+                            echo 'Running npm audit on frontend'
+                            sh '''#!/bin/bash
                             pushd frontend
                             npm audit || True
                             popd
@@ -33,12 +33,12 @@ pipeline {
                         }
                     }
                 }
-                stage('npm audit - Backend') {
+                stage('NPM audit - Backend') {
                     steps {
                         script {
                             
-                            echo "running npm audit backend" 
-                            sh '''#/bin/bash
+                            echo "Running npm audit on backend" 
+                            sh '''#!/bin/bash
                             pushd backend
                             npm audit || True
                             popd
@@ -75,7 +75,7 @@ pipeline {
                 }
             }
         }
-        stage('Docker Image Scanning for CVEs') {
+        stage('SAST - Docker Image Scanning CVEs') {
             parallel {
                 stage('Scan Frontend Image using Trivy') {
                     steps {
