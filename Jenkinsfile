@@ -75,7 +75,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Scan Frontend Image using Trivy') {
+                stage('Scan Backend Image using Trivy') {
                     steps {
                         script {
                             sh '''
