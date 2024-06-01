@@ -6,7 +6,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = "container-registry.registry.svc.local:3200"
-        //SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        //SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation' //
     }
 
     stages {
