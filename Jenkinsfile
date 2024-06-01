@@ -21,7 +21,14 @@ pipeline {
                 stage('NPM aduit - Frontend') {
                     steps {
                         script {
-                             echo 'Running audit frontend'
+                            echo 'Running audit frontend'
+                            sh '''#/bin/bash
+                            pushd frontend
+                            npm audit || True
+                            popd
+                            '''
+                            
+                            
                             
                         }
                     }
@@ -30,7 +37,12 @@ pipeline {
                     steps {
                         script {
                             
-                                echo "running npm audit backend"                            
+                            echo "running npm audit backend" 
+                            sh '''#/bin/bash
+                            pushd backend
+                            npm audit || True
+                            popd
+                            '''
                         }
                     }
                 }
