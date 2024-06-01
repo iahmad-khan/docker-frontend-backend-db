@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-repo.git' // Replace with your repo URL
+                git 'https://github.com/iahmad-khan/docker-frontend-backend-db.git'
             }
         }
 
