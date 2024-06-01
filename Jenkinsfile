@@ -54,7 +54,7 @@ pipeline {
                     steps {
                         script {
                             sh '''
-                            m -rf frontend/package-lock.json
+                            rm -rf backend/package-lock.json
                             docker build -t ${DOCKER_REGISTRY}/backend:latest backend
                             
                             '''
