@@ -42,14 +42,22 @@ pipeline {
                 stage('Build Frontend') {
                     steps {
                         script {
-                            sh 'docker build -t ${DOCKER_REGISTRY}/frontend:latest frontend'
+                            sh ''' 
+                            pushd frontend
+                            docker build -t ${DOCKER_REGISTRY}/frontend:latest .
+                            popd
+                            '''
                         }
                     }
                 }
                 stage('Build Backend') {
                     steps {
                         script {
-                            sh 'docker build -t ${DOCKER_REGISTRY}/backend:latest backend'
+                            sh '''
+                            pushd backend
+                            docker build -t ${DOCKER_REGISTRY}/backend:latest .
+                            popd
+                            '''
                         }
                     }
                 }
