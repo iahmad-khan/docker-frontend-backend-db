@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: container-registry.registry.svc.local:3200/frontend
+  repository: container-registry.registry.svc.local:32000/frontend
   tag: latest
   pullPolicy: IfNotPresent
 
