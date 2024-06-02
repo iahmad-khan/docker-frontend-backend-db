@@ -118,28 +118,16 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            parallel {
-                stage('Deploy Frontend') {
-                    steps {
-                       
-                        script {
-                            echo 'Running Helm Deploy for Frontend'
-                            //sh 'helm upgrade --install frontend ./charts/frontend --set image.repository=${DOCKER_REGISTRY}/frontend --set image.tag=latest'
-                        }
-                    }
-                }
-                stage('Deploy Backend') {
-                    steps {
-                        script {
-                            echo 'running Helm deploy for Backend'
-                            //sh 'helm upgrade --install backend ./charts/backend --set image.repository=${DOCKER_REGISTRY}/backend --set image.tag=latest'
-                        }
-                    }
+        stage('Deploy to Kubernetes Dev') {
+           steps {
+                script {
+                    echo 'Running Helm Deploy for Frontend'
+                    helm dependency update ./charts
+                    //sh 'helm upgrade --install frontend ./charts/frontend --set image.repository=${DOCKER_REGISTRY}/frontend --set image.tag=latest'
+                 }
                 }
             }
-        }
-
+                
         stage('Run DAST with OWASP ZAP') {
             steps {
                 script {
