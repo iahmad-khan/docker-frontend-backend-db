@@ -122,11 +122,11 @@ pipeline {
            steps {
                 script {
                     echo 'Running Helm Deploy for Frontend'
-                    helm dependency update ./charts
+                    sh 'helm dependency update ./charts'
                     //sh 'helm upgrade --install frontend ./charts/frontend --set image.repository=${DOCKER_REGISTRY}/frontend --set image.tag=latest'
                  }
-                }
             }
+        }
                 
         stage('Run DAST with OWASP ZAP') {
             steps {
