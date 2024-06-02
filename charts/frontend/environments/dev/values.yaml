@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: localhost:32000/frontend
-  tag: latest
+  repository: "localhost:32000/frontend"
+  tag: v10
   pullPolicy: IfNotPresent
 
 service:
@@ -16,3 +16,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+env:
+  REACT_APP_API_URL: "http://10.1.83.194:3001/api"

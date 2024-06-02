@@ -23,6 +23,9 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: REACT_APP_API_URL
+              value: "{{ .Values.env.REACT_APP_API_URL }}"
           ports:
             - containerPort: 3000
           resources:

@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: localhost:32000/backend
-  tag: v1
+  tag: v10
   pullPolicy: IfNotPresent
 
 service:
@@ -20,9 +20,9 @@ affinity: {}
 
 mongodb:
   auth:
-    username: 'username'
-    password: 'password'
-    database: 'todos'
+    username: username
+    password: password
+    database: todos
   primary:
     persistence:
       enabled: true
