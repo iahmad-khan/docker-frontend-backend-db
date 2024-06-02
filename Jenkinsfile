@@ -5,8 +5,7 @@ pipeline {
     
 
     environment {
-        DOCKER_REGISTRY = "container-registry.registry.svc.local:32000"
-        //SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation' 
+        DOCKER_REGISTRY = "localhost:32000"
     }
 
     stages {
@@ -121,9 +120,12 @@ pipeline {
         stage('Deploy to Kubernetes Dev') {
            steps {
                 script {
-                    echo 'Running Helm Deploy for Frontend'
-                    sh 'helm dependency update ./charts'
-                    //sh 'helm upgrade --install frontend ./charts/frontend --set image.repository=${DOCKER_REGISTRY}/frontend --set image.tag=latest'
+                    echo 'Running Helm Deployments'
+                    sh '''
+                      helm upgrade --install backend -f charts/backend/environments/dev/values.yaml charts/backend/
+                      helm upgrade --install frontend -f charts/frontend/environments/dev/values.yaml charts/frontend/
+                    '''
+
                  }
             }
         }
@@ -133,15 +135,16 @@ pipeline {
                 script {
                    echo 'Running DAST with OWASP ZAP'
 
-                   // def targetUrl = "http://your-api-endpoint" // Replace with your actual target URL
+                  sh '''
+                     FRONTEND_PORT=$(kubectl get svc frontend-frontend -o jsonpath='{.spec.ports[?(@.nodePort)].nodePort}')
+                     docker run --net=host --name owasp-zap -dt zaproxy/zap-stable /bin/bash
+                     docker exec owasp-zap  mkdir /zap/wrk
+                     docker exec owasp-zap zap-baseline.py -t http://localhost:$FRONTEND_PORT -r freport.html -I 
+                     docker cp owasp-zap:/zap/wrk/freport.html ${WORKSPACE}/freport.html
+                     docker stop owasp-zap && docker rm owasp-zap
 
-                   // zapStart zapHome: '/path/to/ZAP' // Adjust the path to your ZAP installation if necessary
+                  '''
 
-                   // zapAttack target: targetUrl, attackMode: 'quick'
-
-                    //zapReport reportName: 'zap-report.html', reportType: 'HTML'
-
-                    //zapStop()
                 }
             }
         }
@@ -150,9 +153,13 @@ pipeline {
             steps {
                 script {
                     echo 'Running Load Test'
-                    //echo "Load Test using Hey"
-                    // Assuming you have a load testing tool installed (e.g., hey)
-                    //sh 'hey -z 30s -c 100 http://your-api-endpoint'
+                    sh '''
+
+                    API_PORT=$(kubectl get svc backend-backend -o jsonpath='{.spec.ports[?(@.nodePort)].nodePort}')
+                
+                    hey -z 2m -q 100 -c 100 -t 1 http://localhost:$API_PORT/api/todos
+
+                    '''
                 }
             }
         }
