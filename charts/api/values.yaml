@@ -1,14 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: container-registry.registry.svc.local:3200/api
+  repository: container-registry.registry.svc.local:3200/frontend
   tag: latest
   pullPolicy: IfNotPresent
 
 service:
   type: NodePort
   port: 3001
-  nodePort: 30001
 
 resources: {}
 
@@ -17,3 +16,16 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+mongodb:
+  auth:
+    username: username
+    password: password
+    database: todos
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+  service:
+    port: 27017

@@ -1,14 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: container-registry.registry.svc.local:3200/web
+  repository: container-registry.registry.svc.local:3200/frontend
   tag: latest
   pullPolicy: IfNotPresent
 
 service:
   type: NodePort
   port: 3000
-  nodePort: 30000
 
 resources: {}
 
