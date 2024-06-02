@@ -9,6 +9,5 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 3001
-      nodePort: {{ .Values.service.nodePort }}
   selector:
     {{- include "backend.selectorLabels" . | nindent 4 }}

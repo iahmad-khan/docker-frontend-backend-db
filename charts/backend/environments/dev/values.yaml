@@ -2,11 +2,11 @@ replicaCount: 1
 
 image:
   repository: localhost:32000/backend
-  tag: latest
+  tag: v1
   pullPolicy: IfNotPresent
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 3001
 
 resources: {}
