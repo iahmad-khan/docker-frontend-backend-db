@@ -19,10 +19,8 @@ pipeline {
         stage('Get Git Commit SHA') {
             steps {
                 script {
-                  sh '''
-                     GIT_COMMIT_SH=$(git rev-parse --short HEAD)
-                     echo $GIT_COMMIT_SH
-                  '''
+
+                    env.GIT_COMMIT_SH = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
               
                 }
             }
