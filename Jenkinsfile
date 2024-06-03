@@ -64,7 +64,7 @@ pipeline {
                         script {
                             sh ''' 
                             rm -rf frontend/package-lock.json
-                            docker build -t ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT} frontend
+                            docker build -t ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6} frontend
                             
                             '''
                         }
@@ -75,7 +75,7 @@ pipeline {
                         script {
                             sh '''
                             rm -rf backend/package-lock.json
-                            docker build -t ${DOCKER_REGISTRY}/backend:${GIT_COMMIT} backend
+                            docker build -t ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6} backend
                             
                             '''
                         }
@@ -89,7 +89,7 @@ pipeline {
                     steps {
                         script {
                             sh ''' 
-                             trivy image ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT} || true
+                             trivy image ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6} || true
                             
                             '''
                         }
@@ -99,7 +99,7 @@ pipeline {
                     steps {
                         script {
                             sh '''
-                            trivy image ${DOCKER_REGISTRY}/backend:${GIT_COMMIT} || true
+                            trivy image ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6} || true
                             
                             '''
                         }
@@ -112,14 +112,14 @@ pipeline {
                 stage('Push Frontend') {
                     steps {
                         script {
-                            sh 'docker push ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT}'
+                            sh 'docker push ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6}'
                         }
                     }
                 }
                 stage('Push Backend') {
                     steps {
                         script {
-                            sh 'docker push ${DOCKER_REGISTRY}/backend:${GIT_COMMIT}'
+                            sh 'docker push ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6}'
                         }
                     }
                 }
@@ -131,8 +131,8 @@ pipeline {
                 script {
                     echo 'Running Helm Deployments'
                     sh '''
-                      sed -i "s/latest/${GIT_COMMIT}/" charts/backend/environments/dev/values.yaml
-                      sed -i "s/latest/${GIT_COMMIT}/" charts/frontend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT:0:6}/" charts/backend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT:0:6}/" charts/frontend/environments/dev/values.yaml
 
                       helm upgrade --install backend -f charts/backend/environments/dev/values.yaml charts/backend/
                       helm upgrade --install frontend -f charts/frontend/environments/dev/values.yaml charts/frontend/
