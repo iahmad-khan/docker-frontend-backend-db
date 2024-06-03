@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: localhost:32000/backend
-  tag: v10
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
