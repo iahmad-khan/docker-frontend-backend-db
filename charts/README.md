@@ -1,5 +1,5 @@
 ```
-.
+
 ├── -
 ├── backend
 │   ├── Chart.lock
@@ -13,6 +13,7 @@
 │   └── templates
 │       ├── deployment.yaml
 │       ├── _helpers.tpl
+│       ├── hpa.yaml
 │       └── service.yaml
 ├── frontend
 │   ├── Chart.yaml
@@ -23,6 +24,7 @@
 │   └── templates
 │       ├── deployment.yaml
 │       ├── _helpers.tpl
+│       ├── hpa.yaml
 │       └── service.yaml
 └── README.md
 
