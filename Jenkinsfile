@@ -19,7 +19,9 @@ pipeline {
         stage('Get Git Commit SHA') {
             steps {
                 script {
-                    env.GIT_COMMIT = sh(script: 'git rev-parse --short=6 HEAD', returnStdout: true).trim()
+                    def gitCommitFull = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    env.GIT_COMMIT = gitCommitFull.substring(0, 6)
+                    echo "Short SHA: ${env.GIT_COMMIT}"
                 }
             }
         }
@@ -64,7 +66,7 @@ pipeline {
                         script {
                             sh ''' 
                             rm -rf frontend/package-lock.json
-                            docker build -t ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6} frontend
+                            docker build -t ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT} frontend
                             
                             '''
                         }
@@ -75,7 +77,7 @@ pipeline {
                         script {
                             sh '''
                             rm -rf backend/package-lock.json
-                            docker build -t ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6} backend
+                            docker build -t ${DOCKER_REGISTRY}/backend:${GIT_COMMIT} backend
                             
                             '''
                         }
@@ -89,7 +91,7 @@ pipeline {
                     steps {
                         script {
                             sh ''' 
-                             trivy image ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6} || true
+                             trivy image ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT} || true
                             
                             '''
                         }
@@ -99,7 +101,7 @@ pipeline {
                     steps {
                         script {
                             sh '''
-                            trivy image ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6} || true
+                            trivy image ${DOCKER_REGISTRY}/backend:${GIT_COMMIT} || true
                             
                             '''
                         }
@@ -112,14 +114,14 @@ pipeline {
                 stage('Push Frontend') {
                     steps {
                         script {
-                            sh 'docker push ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT:0:6}'
+                            sh 'docker push ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT}'
                         }
                     }
                 }
                 stage('Push Backend') {
                     steps {
                         script {
-                            sh 'docker push ${DOCKER_REGISTRY}/backend:${GIT_COMMIT:0:6}'
+                            sh 'docker push ${DOCKER_REGISTRY}/backend:${GIT_COMMIT}'
                         }
                     }
                 }
@@ -131,8 +133,8 @@ pipeline {
                 script {
                     echo 'Running Helm Deployments'
                     sh '''
-                      sed -i "s/latest/${GIT_COMMIT:0:6}/" charts/backend/environments/dev/values.yaml
-                      sed -i "s/latest/${GIT_COMMIT:0:6}/" charts/frontend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT}/" charts/backend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT}/" charts/frontend/environments/dev/values.yaml
 
                       helm upgrade --install backend -f charts/backend/environments/dev/values.yaml charts/backend/
                       helm upgrade --install frontend -f charts/frontend/environments/dev/values.yaml charts/frontend/
