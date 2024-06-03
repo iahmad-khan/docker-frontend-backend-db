@@ -85,6 +85,7 @@ pipeline {
                 }
             }
         }
+
         stage('SAST - Docker Image Scanning CVEs') {
             parallel {
                 stage('Scan Frontend Image using Trivy') {
@@ -109,6 +110,7 @@ pipeline {
                 }
             }
         }   
+
         stage('Push Docker Images') {
             parallel {
                 stage('Push Frontend') {
@@ -162,7 +164,6 @@ pipeline {
                      docker exec owasp-zap  mkdir /zap/wrk
                      docker exec owasp-zap zap-baseline.py -t http://localhost:$FRONTEND_PORT -r freport.html -I 
                      docker cp owasp-zap:/zap/wrk/freport.html ${WORKSPACE}/freport.html
-                     docker kill owasp-zap && docker rm owasp-zap
 
                   '''
 
@@ -178,7 +179,7 @@ pipeline {
 
                     API_PORT=$(kubectl get svc backend-backend -o jsonpath='{.spec.ports[?(@.nodePort)].nodePort}')
                 
-                    hey -z 2m -q 100 -c 100 -t 1 http://localhost:$API_PORT/api/todos
+                    hey -z 1m -q 100 -c 100 -t 1 http://localhost:$API_PORT/api/todos
 
                     '''
                 }
@@ -189,6 +190,8 @@ pipeline {
     post {
         always {
             cleanWs()
+            script {
+                sh 'docker kill owasp-zap && docker rm owasp-zap'
         }
     }
 }
