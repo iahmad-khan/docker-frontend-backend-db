@@ -192,6 +192,7 @@ pipeline {
             cleanWs()
             script {
                 sh 'docker kill owasp-zap && docker rm owasp-zap'
+          }
         }
     }
 }
