@@ -58,7 +58,37 @@ pipeline {
                 }
             }
         }
-
+        stage('SAST-Trivy Scanning') {
+            parallel {
+                stage('Trivy Scanning - Frontend') {
+                    steps {
+                        script {
+                            
+                            sh '''#!/bin/bash
+                            pushd frontend
+                            trivy fs . || true
+                            popd
+                            '''
+                            
+                            
+                            
+                        }
+                    }
+                }
+                stage('Trivy Scanning - Backend') {
+                    steps {
+                        script {
+                            
+                            sh '''#!/bin/bash
+                            pushd backend
+                            trivy fs . || true
+                            popd
+                            '''
+                        }
+                    }
+                }
+            }
+        }
         stage('Build Docker Images') {
             parallel {
                 stage('Build Frontend') {
@@ -85,31 +115,6 @@ pipeline {
                 }
             }
         }
-
-        stage('SAST - Docker Image Scanning CVEs') {
-            parallel {
-                stage('Scan Frontend Image using Trivy') {
-                    steps {
-                        script {
-                            sh ''' 
-                             trivy image ${DOCKER_REGISTRY}/frontend:${GIT_COMMIT_SH} || true
-                            
-                            '''
-                        }
-                    }
-                }
-                stage('Scan Backend Image using Trivy') {
-                    steps {
-                        script {
-                            sh '''
-                            trivy image ${DOCKER_REGISTRY}/backend:${GIT_COMMIT_SH} || true
-                            
-                            '''
-                        }
-                    }
-                }
-            }
-        }   
 
         stage('Push Docker Images') {
             parallel {
