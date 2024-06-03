@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: "localhost:32000/frontend"
@@ -19,3 +19,8 @@ affinity: {}
 
 env:
   REACT_APP_API_URL: "http://10.152.183.114:3001/api"
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
