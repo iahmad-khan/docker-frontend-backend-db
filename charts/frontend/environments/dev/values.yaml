@@ -18,4 +18,4 @@ tolerations: []
 affinity: {}
 
 env:
-  REACT_APP_API_URL: "http://10.1.83.227:3001/api"
+  REACT_APP_API_URL: "http://10.152.183.114:3001/api"
