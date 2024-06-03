@@ -131,8 +131,8 @@ pipeline {
                 script {
                     echo 'Running Helm Deployments'
                     sh '''
-                      sed -i 's/latest/${GIT_COMMIT}/' charts/backend/environments/dev/values.yaml
-                      sed -i 's/latest/${GIT_COMMIT}/' charts/frontend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT}/" charts/backend/environments/dev/values.yaml
+                      sed -i "s/latest/${GIT_COMMIT}/" charts/frontend/environments/dev/values.yaml
 
                       helm upgrade --install backend -f charts/backend/environments/dev/values.yaml charts/backend/
                       helm upgrade --install frontend -f charts/frontend/environments/dev/values.yaml charts/frontend/
