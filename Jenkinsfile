@@ -122,8 +122,16 @@ pipeline {
                 script {
                     echo 'Running Helm Deployments'
                     sh '''
+
                       helm upgrade --install backend -f charts/backend/environments/dev/values.yaml charts/backend/
                       helm upgrade --install frontend -f charts/frontend/environments/dev/values.yaml charts/frontend/
+                      sleep 10
+                      helm status backend
+                      helm status frontend
+                      kubectl rollout status deploy backend-backend
+                      kubectl rollout status deploy frontend-frontend
+                      kubectl get pods -A
+
                     '''
 
                  }
