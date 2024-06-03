@@ -162,7 +162,7 @@ pipeline {
                      docker exec owasp-zap  mkdir /zap/wrk
                      docker exec owasp-zap zap-baseline.py -t http://localhost:$FRONTEND_PORT -r freport.html -I 
                      docker cp owasp-zap:/zap/wrk/freport.html ${WORKSPACE}/freport.html
-                     docker stop owasp-zap && docker rm owasp-zap
+                     docker kill owasp-zap && docker rm owasp-zap
 
                   '''
 
