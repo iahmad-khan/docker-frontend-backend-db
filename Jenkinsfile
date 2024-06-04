@@ -167,8 +167,8 @@ pipeline {
                      FRONTEND_PORT=$(kubectl get svc frontend-frontend -o jsonpath='{.spec.ports[?(@.nodePort)].nodePort}')
                      docker run --net=host --name owasp-zap -dt zaproxy/zap-stable /bin/bash
                      docker exec owasp-zap  mkdir /zap/wrk
-                     docker exec owasp-zap zap-baseline.py -t http://localhost:$FRONTEND_PORT -r freport.html -I 
-                     docker cp owasp-zap:/zap/wrk/freport.html ${WORKSPACE}/freport.html
+                     docker exec owasp-zap zap-baseline.py -t http://localhost:$FRONTEND_PORT -r report.html -I 
+                     docker cp owasp-zap:/zap/wrk/report.html ${WORKSPACE}/report.html
 
                   '''
 
@@ -190,6 +190,15 @@ pipeline {
                 }
             }
         }
+       stage('K8s SecurityAudit Report') {
+            steps {
+                script {
+                    echo 'Running Kubernetes security audit for configs'
+                    sh 'kubectl describe configauditreports --all-namespaces'
+                }
+            }
+        }
+
     }
 
     post {
