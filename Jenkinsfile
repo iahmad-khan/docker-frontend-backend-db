@@ -180,7 +180,6 @@ pipeline {
                 publishHTML (target : [allowMissing: false,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'reports',
                 reportFiles: 'report.html',
                 reportName: 'ZAP Reports',
                 reportTitles: 'The ZAP Report'])
