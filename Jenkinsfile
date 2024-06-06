@@ -175,16 +175,6 @@ pipeline {
                 }
             }
         }
-       stage('Publish ZAP Report'){
-            steps{
-                publishHTML (target : [allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportFiles: 'report.html',
-                reportName: 'ZAP Reports',
-                reportTitles: 'The ZAP Report'])
-            }
-        }
         stage('API Load Testing') {
             steps {
                 script {
@@ -212,6 +202,15 @@ pipeline {
 
     post {
         always {
+            archiveArtifacts artifacts: 'report.html', allowEmptyArchive: true
+            publishHTML (target : [allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportFiles: 'report.html',
+                reportDir: '',
+                reportName: 'ZAP Reports',
+                reportTitles: 'The ZAP Report'])
+            
             cleanWs()
             script {
                 sh 'docker kill owasp-zap && docker rm owasp-zap'
